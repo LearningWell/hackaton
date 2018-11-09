@@ -18,29 +18,74 @@ mongoose.connection.once('open', function(){
 */
 
 const mockProducts = [{
-    name: "Product 1",
-    manufacturerId: ""
+    name: "Mjölk",
+    score: Math.round(Math.random()*5+1),
+    manufacturerId: "1"
 },
 {
-    name: "Product 2",
-    manufacturerId: ""
+    name: "Köttfärs",
+    score: Math.round(Math.random()*5+1),
+    manufacturerId: "3"
 },
 {
-    name: "Product 3",
-    manufacturerId: ""
+    name: "Godis",
+    score: Math.round(Math.random()*5+1),
+    manufacturerId: "2"
 }
-]
+];
 
+const mockManufacturers = [{
+    id: "1",
+    name: "LearningWell",
+},
+{
+    id: "2",
+    name: "MachineFood",
+},{
+    name: "StarMeat Inc",
+}
+];
+
+
+const BookType = new GraphQLObjectType({
+    name: 'Book',
+    fields: () => ({
+        id: {type: GraphQLID},
+        name: {type: GraphQLString},
+        genre: {type: GraphQLString},
+        author: {
+            type: AuthorType,
+            resolve(parent, args){
+               return Author.findById(parent.authorId);          
+           }
+        }
+    })
+});
+const AuthorType = new GraphQLObjectType({
+   name: 'Author',
+   fields: () => ({
+       id: {type: GraphQLID},
+       name: {type: GraphQLString},
+       age: {type: GraphQLInt},
+       books: {
+           type: GraphQLList(BookType),
+           resolve(parent, args){
+               return Book.find({authorId: parent.id});
+           }
+       }
+   })
+});
 
 const ProductType = new GraphQLObjectType({
     name: 'Product',
     fields: () => ({
         id: {type: GraphQLID},
         name: {type: GraphQLString},
+        score: {type: GraphQLInt},
         manufacturer:  {
             type: ManufacturerType,
             resolve(parent, args){
-                return Product.findById(parent.manufacturerId)
+                return mockManufacturers.find(x => x.id === parent.manufacturerId)
             }
         }
     })
@@ -63,34 +108,7 @@ const ManufacturerType = new GraphQLObjectType({
 
 
 
- const BookType = new GraphQLObjectType({
-     name: 'Book',
-     fields: () => ({
-         id: {type: GraphQLID},
-         name: {type: GraphQLString},
-         genre: {type: GraphQLString},
-         author: {
-             type: AuthorType,
-             resolve(parent, args){
-                return Author.findById(parent.authorId);          
-            }
-         }
-     })
- });
- const AuthorType = new GraphQLObjectType({
-    name: 'Author',
-    fields: () => ({
-        id: {type: GraphQLID},
-        name: {type: GraphQLString},
-        age: {type: GraphQLInt},
-        books: {
-            type: GraphQLList(BookType),
-            resolve(parent, args){
-                return Book.find({authorId: parent.id});
-            }
-        }
-    })
-});
+
 
  const RootQuery = new GraphQLObjectType({
      name: 'RootQueryType',
@@ -99,7 +117,7 @@ const ManufacturerType = new GraphQLObjectType({
              type: ProductType,
              args: {id: {type: GraphQLID}},
              resolve(parent, args){
-                 return Product.findById(args.id);
+                 return mockProducts.find(x => x.id === args.id);
              }
          },
          products: {
@@ -107,6 +125,26 @@ const ManufacturerType = new GraphQLObjectType({
              resolve(parent, args){
                  return mockProducts;
              }
+         },
+         searchProducts: {
+             type: GraphQLList(ProductType),
+             args: {name: {type: GraphQLString}},
+             resolve(parent, args){
+                 return mockProducts.filter(x => x.name.includes(args.name));
+             }
+         },
+         manufacturer: {
+             type: ManufacturerType,
+             args: {id: {type: GraphQLString}},
+             resolve(parent, args){
+                 return mockManufacturers.find(x => x.id === args.id);
+             }
+         },
+         manufacturers: {
+            type: GraphQLList(ManufacturerType),
+            resolve(parent, args){
+                return mockManufacturers;
+            }
          },
          book: {
              type: BookType,
@@ -173,6 +211,8 @@ const Mutation = new GraphQLObjectType({
         }
     }
 })
+
+
 
 
 module.exports = new GraphQLSchema({
