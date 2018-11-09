@@ -1,20 +1,12 @@
 const graphql = require("graphql");
-const _ = require("lodash");
-const mongoose = require("mongoose");
-const Book = require("../models/book");
-const Author = require("../models/author");
-const Product = require("../models/product");
-const Manufacturer = require("../models/manufacturer");
 const { Client } = require("pg");
 
 const {
   GraphQLObjectType,
   GraphQLString,
   GraphQLSchema,
-  GraphQLID,
   GraphQLInt,
-  GraphQLList,
-  GraphQLNonNull
+  GraphQLList
 } = graphql;
 
 async function main() {
@@ -28,79 +20,20 @@ async function main() {
 
   await client.connect();
 
-  const mockProducts = [
-    {
-      name: "Mjölk",
-      score: Math.round(Math.random() * 4 + 1),
-      manufacturerId: "1"
-    },
-    {
-      name: "Köttfärs",
-      score: Math.round(Math.random() * 4 + 1),
-      manufacturerId: "3"
-    },
-    {
-      name: "Godis",
-      score: Math.round(Math.random() * 4 + 1),
-      manufacturerId: "2"
-    }
-  ];
-
-  const mockManufacturers = [
-    {
-      id: "1",
-      name: "LearningWell"
-    },
-    {
-      id: "2",
-      name: "MachineFood"
-    },
-    {
-      name: "StarMeat Inc"
-    }
-  ];
-
-  const BookType = new GraphQLObjectType({
-    name: "Book",
-    fields: () => ({
-      id: { type: GraphQLID },
-      name: { type: GraphQLString },
-      genre: { type: GraphQLString },
-      author: {
-        type: AuthorType,
-        resolve(parent, args) {
-          return Author.findById(parent.authorId);
-        }
-      }
-    })
-  });
-  const AuthorType = new GraphQLObjectType({
-    name: "Author",
-    fields: () => ({
-      id: { type: GraphQLID },
-      name: { type: GraphQLString },
-      age: { type: GraphQLInt },
-      books: {
-        type: GraphQLList(BookType),
-        resolve(parent, args) {
-          return Book.find({ authorId: parent.id });
-        }
-      }
-    })
-  });
-
   const ProductType = new GraphQLObjectType({
     name: "Product",
     fields: () => ({
-      id: { type: GraphQLID },
+      id: { type: GraphQLInt },
       name: { type: GraphQLString },
       score: { type: GraphQLInt },
+      img: { type: GraphQLString },
       manufacturer: {
         type: ManufacturerType,
         async resolve(parent, args) {
+          console.log(parent);
           const res = await client.query(
-            "SELECT * from manufacturer where manufacturerId=$1::int",
-            [parent.manufacturerId]
+            "SELECT * from manufacturer where manufacturerId=$1",
+            [parent.manufacturerid]
           );
           return res.rows[0];
         }
@@ -111,12 +44,17 @@ async function main() {
   const ManufacturerType = new GraphQLObjectType({
     name: "Manufacturer",
     fields: () => ({
-      id: { type: GraphQLID },
+      id: { type: GraphQLInt },
       name: { type: GraphQLString },
       products: {
         type: GraphQLList(ProductType),
-        resolve(parent, args) {
-          return Product.find({ manufacturerId: parent.id });
+        async resolve(parent, args) {
+          console.log(parent.manufacturerId);
+          const res = await client.query(
+            "SELECT * from product where manufacturerId=$1",
+            [parent.manufacturerid]
+          );
+          return res.rows;
         }
       }
     })
@@ -127,16 +65,23 @@ async function main() {
     fields: {
       product: {
         type: ProductType,
-        args: { id: { type: GraphQLID } },
-        resolve(parent, args) {
-          return mockProducts.find(x => x.id === args.id);
+        args: { id: { type: GraphQLInt } },
+        async resolve(parent, args) {
+          const res = await client.query(
+            "SELECT * from product where productId=$1",
+            [args.id]
+          );
+          return res.rows[0];
         }
       },
       products: {
         type: GraphQLList(ProductType),
         async resolve(parent, args) {
           const res = await client.query("SELECT * from product");
-          return res.rows;
+          return res.rows.map(product => ({
+            ...product,
+            id: product.productid
+          }));
         }
       },
       searchProducts: {
@@ -152,46 +97,28 @@ async function main() {
       },
       manufacturer: {
         type: ManufacturerType,
-        args: { id: { type: GraphQLString } },
-        resolve(parent, args) {
-          return mockManufacturers.find(x => x.id === args.id);
+        args: { id: { type: GraphQLInt } },
+        async resolve(parent, args) {
+          const res = await client.query(
+            "SELECT * from manufacturer where manufacturerId=$1",
+            [args.id]
+          );
+          return res.rows;
+
+          //return mockManufacturers.find(x => x.id === args.id);
         }
       },
       manufacturers: {
         type: GraphQLList(ManufacturerType),
-        resolve(parent, args) {
-          return mockManufacturers;
-        }
-      },
-      book: {
-        type: BookType,
-        args: { id: { type: GraphQLID } },
-        resolve(parent, args) {
-          return Book.findById(args.id);
-        }
-      },
-      books: {
-        type: GraphQLList(BookType),
-        resolve(parent, args) {
-          return Book.find({});
-        }
-      },
-      author: {
-        type: AuthorType,
-        args: { id: { type: GraphQLID } },
-        resolve(parent, args) {
-          return Author.findById(args.id);
-        }
-      },
-      authors: {
-        type: GraphQLList(AuthorType),
-        resolve() {
-          return Author.find({});
+        async resolve(parent, args) {
+          const res = await client.query("SELECT * from manufacturer");
+          return res.rows;
         }
       }
     }
   });
 
+  /*
   const Mutation = new GraphQLObjectType({
     name: "Mutation",
     fields: {
@@ -227,10 +154,10 @@ async function main() {
       }
     }
   });
-
+*/
   return new GraphQLSchema({
-    query: RootQuery,
-    mutation: Mutation
+    query: RootQuery
+    //mutation: Mutation
   });
 }
 
