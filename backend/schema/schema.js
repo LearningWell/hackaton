@@ -19,23 +19,14 @@ const {
 
 async function main() {
   const client = new Client({
-    user: "axel",
+    user: "postgres",
     host: "localhost",
     database: "postgres",
-    password: "hej",
+    password: "postgres",
     port: 5432
   });
 
   await client.connect();
-
-  /*
-mongoose.connect('mongodb://localhost/graphqldb');
-mongoose.connection.once('open', function(){
-    console.log('Connection has been made, now make fireworks.');
-}).on('error', function(error){
-    console.log('Connection error: ', error);
-});
-*/
 
   const mockProducts = [
     {
@@ -108,11 +99,10 @@ mongoose.connection.once('open', function(){
         type: ManufacturerType,
         async resolve(parent, args) {
           const res = await client.query(
-            "SELECT name from manufacturer where manufacturerId=$1::int",
+            "SELECT * from manufacturer where manufacturerId=$1::int",
             [parent.manufacturerId]
           );
           return res.rows[0];
-          //return mockManufacturers.find(x => x.id === parent.manufacturerId);
         }
       }
     })
@@ -144,15 +134,20 @@ mongoose.connection.once('open', function(){
       },
       products: {
         type: GraphQLList(ProductType),
-        resolve(parent, args) {
-          return mockProducts;
+        async resolve(parent, args) {
+          const res = await client.query("SELECT * from product");
+          return res.rows;
         }
       },
       searchProducts: {
         type: GraphQLList(ProductType),
         args: { name: { type: GraphQLString } },
-        resolve(parent, args) {
-          return mockProducts.filter(x => x.name.includes(args.name));
+        async resolve(parent, args) {
+          const res = await client.query(
+            "SELECT * from product where name ilike $1",
+            ["%" + args.name + "%"]
+          );
+          return res.rows;
         }
       },
       manufacturer: {
