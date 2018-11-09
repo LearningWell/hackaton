@@ -23,4 +23,4 @@ VALUES('LearningWell'),
 INSERT INTO product(name, score, manufacturerId)
 VALUES('Mjölk', 1, (SELECT manufacturerId FROM manufacturer WHERE manufacturer.name='LearningWell'), 'products/images/mjolk.jpg'),
       ('Köttfärs', 2, (SELECT manufacturerId FROM manufacturer WHERE manufacturer.name='MachineFood'), 'products/images/kott.jpg'),
-      ('Godis', 3, (SELECT manufacturerId FROM manufacturer WHERE manufacturer.name='StarMeat Inc')), 'products/images/godis.jpg');
+      ('Godis', 3, (SELECT manufacturerId FROM manufacturer WHERE manufacturer.name='StarMeat Inc'), 'products/images/godis.jpg');
