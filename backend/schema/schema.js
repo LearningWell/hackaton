@@ -40,17 +40,17 @@ mongoose.connection.once('open', function(){
   const mockProducts = [
     {
       name: "Mjölk",
-      score: Math.round(Math.random() * 5 + 1),
+      score: Math.round(Math.random() * 4 + 1),
       manufacturerId: "1"
     },
     {
       name: "Köttfärs",
-      score: Math.round(Math.random() * 5 + 1),
+      score: Math.round(Math.random() * 4 + 1),
       manufacturerId: "3"
     },
     {
       name: "Godis",
-      score: Math.round(Math.random() * 5 + 1),
+      score: Math.round(Math.random() * 4 + 1),
       manufacturerId: "2"
     }
   ];
