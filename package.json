@@ -1,0 +1,31 @@
+{
+  "name": "hackaton",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@types/react": "^16.7.1",
+    "@types/react-dom": "^16.0.9",
+    "@types/webpack-env": "^1.13.6",
+    "react": "^16.6.1",
+    "react-dom": "^16.6.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^23.3.9",
+    "tscomp": "1.0.0-beta.9"
+  },
+  "tscomp": {
+    "mode": "browser"
+  },
+  "scripts": {
+    "build": "tscomp build",
+    "test": "tscomp test --env=jsdom",
+    "eject": "tscomp eject",
+    "start": "tscomp start"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
