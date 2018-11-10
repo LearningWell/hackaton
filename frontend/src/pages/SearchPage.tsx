@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { TextField, IconButton, List, Button } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 import SearchIcon from '@material-ui/icons/Search'
@@ -59,6 +59,42 @@ export const SearchPage = (props: {
   setQuery: (query: string) => void
 }) => {
   const [products, setProducts] = useState([] as Array<Product>)
+  const searchProducts = async (query: string) => {
+    const response = await fetch(
+      `http://${window.location.hostname}:4000/graphql?`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: `
+          query($query: String!) {
+            searchProducts(name: $query) {
+              id
+              name
+              score
+            }
+          }
+        `,
+          variables: {
+            query: query,
+          },
+        }),
+      }
+    )
+    setProducts(
+      ((await response.json()).data.searchProducts as Array<Product>).sort(
+        (a, b) => b.score - a.score
+      )
+    )
+  }
+
+  useEffect(() => {
+    if (props.query) {
+      searchProducts(props.query)
+    }
+  }, [])
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
@@ -66,36 +102,7 @@ export const SearchPage = (props: {
         <SearchField
           query={props.query}
           setQuery={props.setQuery}
-          onSearch={async query => {
-            const response = await fetch(
-              `http://${window.location.hostname}:4000/graphql?`,
-              {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  query: `
-                  query($query: String!) {
-                    searchProducts(name: $query) {
-                      id
-                      name
-                      score
-                    }
-                  }
-                `,
-                  variables: {
-                    query: query,
-                  },
-                }),
-              }
-            )
-            setProducts(
-              ((await response.json()).data.searchProducts as Array<
-                Product
-              >).sort((a, b) => b.score - a.score)
-            )
-          }}
+          onSearch={searchProducts}
         />
         <div style={{ flex: 1 }}>
           {products && (
