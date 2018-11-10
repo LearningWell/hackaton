@@ -11,8 +11,12 @@ import {
   OutlinedInput,
 } from '@material-ui/core'
 import { Camera } from '../ui/Camera'
+import { Product } from '../entities'
 
-export const NewProductPage = (props: { path: string }) => {
+export const NewProductPage = (props: {
+  path: string
+  basket: Array<Product>
+}) => {
   const [name, setName] = useState('')
   const [information, setInformation] = useState('')
   const [score, setScore] = useState(0)
@@ -190,7 +194,7 @@ export const NewProductPage = (props: { path: string }) => {
           </Button>
         </form>
       </div>
-      <Navigation />
+      <Navigation basket={props.basket} />
     </div>
   )
 }

@@ -1,9 +1,14 @@
 import React from 'react'
-import { BottomNavigation, BottomNavigationAction } from '@material-ui/core'
+import {
+  BottomNavigation,
+  BottomNavigationAction,
+  Badge,
+} from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket'
 import PeopleIcon from '@material-ui/icons/People'
 import { Link } from '@reach/router'
+import { Product } from '../entities'
 
 declare module '@material-ui/core/BottomNavigationAction/BottomNavigationAction' {
   interface BottomNavigationActionProps {
@@ -11,7 +16,7 @@ declare module '@material-ui/core/BottomNavigationAction/BottomNavigationAction'
   }
 }
 
-export const Navigation = () => (
+export const Navigation = (props: { basket: Array<Product> }) => (
   <>
     <div style={{ height: 56 }} />
     <BottomNavigation
@@ -34,7 +39,15 @@ export const Navigation = () => (
       <BottomNavigationAction
         component={Link}
         to="/basket"
-        icon={<ShoppingBasketIcon />}
+        icon={
+          props.basket.length > 0 ? (
+            <Badge badgeContent={props.basket.length} color="secondary">
+              <ShoppingBasketIcon />
+            </Badge>
+          ) : (
+            <ShoppingBasketIcon />
+          )
+        }
       />
       <BottomNavigationAction component={Link} to="/" icon={<PeopleIcon />} />
     </BottomNavigation>

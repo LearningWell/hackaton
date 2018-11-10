@@ -95,7 +95,7 @@ export const BasketPage = (props: {
           )}
         </div>
       </div>
-      <Navigation />
+      <Navigation basket={props.basket} />
     </div>
   )
 }

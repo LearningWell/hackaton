@@ -4,7 +4,11 @@ import { Product, TreeIcon } from '../entities'
 import { Typography, Button } from '@material-ui/core'
 import { Link } from '@reach/router'
 
-export const ProductPage = (props: { path: string; productId?: number }) => {
+export const ProductPage = (props: {
+  path: string
+  productId?: number
+  basket: Array<Product>
+}) => {
   const [product, setProduct] = useState(null as Product | null)
   useEffect(() => {
     const fn = async () => {
@@ -116,7 +120,7 @@ export const ProductPage = (props: { path: string; productId?: number }) => {
           </div>
         )}
       </div>
-      <Navigation />
+      <Navigation basket={props.basket} />
     </div>
   )
 }

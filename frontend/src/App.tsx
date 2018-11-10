@@ -26,6 +26,7 @@ export const App = () => {
         <Router style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
           <SearchPage
             path="/"
+            basket={basket}
             query={query}
             setQuery={setQuery}
             addToBasket={product => setBasket([...basket, product])}
@@ -37,8 +38,8 @@ export const App = () => {
               setBasket(basket.filter(p => p !== product))
             }
           />
-          <ProductPage path="/product/:productId" />
-          <NewProductPage path="/new-product" />
+          <ProductPage path="/product/:productId" basket={basket} />
+          <NewProductPage path="/new-product" basket={basket} />
         </Router>
       </div>
     </MuiThemeProvider>

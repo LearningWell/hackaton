@@ -60,6 +60,7 @@ const SearchField = (props: {
 export const SearchPage = (props: {
   path: string
   addToBasket: (product: Product) => void
+  basket: Array<Product>
   query: string
   setQuery: (query: string) => void
 }) => {
@@ -159,7 +160,7 @@ export const SearchPage = (props: {
           </Button>
         </div>
       </div>
-      <Navigation />
+      <Navigation basket={props.basket} />
     </div>
   )
 }
