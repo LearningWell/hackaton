@@ -75,7 +75,7 @@ export const Camera = (props: {
                 .getUserMedia({
                   audio: false,
                   video: {
-                    facingMode: 'user',
+                    facingMode: 'environment',
                   },
                 })
                 .then(function success(stream) {
