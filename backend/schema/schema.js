@@ -1,12 +1,12 @@
 const graphql = require("graphql");
 const { Client } = require("pg");
-
 const {
   GraphQLObjectType,
   GraphQLString,
   GraphQLSchema,
   GraphQLInt,
-  GraphQLList
+  GraphQLList,
+  GraphQLNonNull
 } = graphql;
 
 async function main() {
@@ -118,25 +118,27 @@ async function main() {
     }
   });
 
-  /*
   const Mutation = new GraphQLObjectType({
     name: "Mutation",
     fields: {
-      addAuthor: {
-        type: AuthorType,
+      addProduct: {
+        type: ProductType,
         args: {
           name: { type: new GraphQLNonNull(GraphQLString) },
-          age: { type: new GraphQLNonNull(GraphQLInt) }
+          score: { type: new GraphQLNonNull(GraphQLInt) },
+          img: { type: new GraphQLNonNull(GraphQLString) },
+          manufacturerid: { type: new GraphQLNonNull(GraphQLInt) }
         },
-        resolve(parent, args) {
-          let author = new Author({
-            name: args.name,
-            age: args.age
-          });
-          return author.save();
+        async resolve(parent, args) {
+          const res = await client.query(
+            "INSERT INTO product (name, score, img, manufacturerid) VALUES($1, $2, $3, $4)",
+            [args.name, args.score, args.img, args.manufacturerid]
+          );
+          return res.rows[0];
         }
-      },
-      addBook: {
+      }
+      /*
+      addBook: {    
         type: BookType,
         args: {
           name: { type: new GraphQLNonNull(GraphQLString) },
@@ -151,13 +153,12 @@ async function main() {
           });
           return book.save();
         }
-      }
+      }*/
     }
   });
-*/
   return new GraphQLSchema({
-    query: RootQuery
-    //mutation: Mutation
+    query: RootQuery,
+    mutation: Mutation
   });
 }
 
