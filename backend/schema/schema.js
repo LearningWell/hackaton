@@ -27,6 +27,7 @@ async function main() {
       name: { type: GraphQLString },
       score: { type: GraphQLInt },
       img: { type: GraphQLString },
+      information: { type: GraphQLString },
       manufacturer: {
         type: ManufacturerType,
         async resolve(parent, args) {
@@ -127,12 +128,14 @@ async function main() {
           name: { type: new GraphQLNonNull(GraphQLString) },
           score: { type: new GraphQLNonNull(GraphQLInt) },
           img: { type: GraphQLString },
+          information: { type: GraphQLString },
           manufacturerid: { type: new GraphQLNonNull(GraphQLInt) }
         },
         async resolve(parent, args) {
+          const score = Math.max(Math.min(args.score, 5), 0);
           const res = await client.query(
-            "INSERT INTO product (name, score, img, manufacturerid) VALUES($1, $2, $3, $4)",
-            [args.name, args.score, args.img, args.manufacturerid]
+            "INSERT INTO product (name, score, img, information, manufacturerid) VALUES($1, $2, $3, $4, $5)",
+            [args.name, score, args.img, args.information, args.manufacturerid]
           );
           return res.rows[0];
         }
