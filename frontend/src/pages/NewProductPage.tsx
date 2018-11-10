@@ -1,4 +1,4 @@
-import React, { useState, useRef, createRef, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Navigation } from '../ui/Navigation'
 import {
   Typography,
@@ -11,7 +11,6 @@ import {
   OutlinedInput,
 } from '@material-ui/core'
 import { Camera } from '../ui/Camera'
-import { Redirect } from '@reach/router'
 
 export const NewProductPage = (props: { path: string }) => {
   const [name, setName] = useState('')
@@ -20,8 +19,6 @@ export const NewProductPage = (props: { path: string }) => {
   const [manufacturerId, setManufacturerId] = useState(0)
   const [img, setImg] = useState<string | null>(null)
   const [cameraActive, setCameraActive] = useState(false)
-  const [redirectTo, setRedirectTo] = useState<string | null>(null)
-  console.log('redirectTo', redirectTo)
 
   const [manufacturers, setManufacturers] = useState([] as Array<{
     id: number
@@ -64,7 +61,6 @@ export const NewProductPage = (props: { path: string }) => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-      {redirectTo && <Redirect from="/new-product" to={redirectTo} />}
       <div
         style={{
           display: 'flex',
@@ -112,9 +108,9 @@ export const NewProductPage = (props: { path: string }) => {
                 }),
               }
             )
-            setRedirectTo(
-              `/product/${(await response.json()).data.addProduct.id}`
-            )
+            window.location.href = `/product/${
+              (await response.json()).data.addProduct.id
+            }`
           }}
         >
           <div style={{ padding: '16px 0', flex: 1 }}>
