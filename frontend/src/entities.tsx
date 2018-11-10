@@ -22,6 +22,7 @@ export const TreeIcon = (props: { grey?: boolean }) => (
 export type Product = {
   id: number
   name: string
+  information: string
   img: string
   score: number
 }

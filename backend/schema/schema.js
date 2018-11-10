@@ -93,7 +93,10 @@ async function main() {
             "SELECT * from product where name ilike $1",
             ["%" + args.name + "%"]
           );
-          return res.rows;
+          return res.rows.map(product => ({
+            ...product,
+            id: product.productid
+          }));
         }
       },
       manufacturer: {

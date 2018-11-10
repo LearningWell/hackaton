@@ -6,7 +6,7 @@ import { Link } from '@reach/router'
 export const ProductListItem = ({
   product,
   divider,
-  actionButton
+  actionButton,
 }: {
   product: Product
   divider?: boolean
@@ -20,7 +20,7 @@ export const ProductListItem = ({
   >
     <ListItemText primary={product.name} />
     <Typography>
-      {Array.from({ length: product.score }).map(() => (
+      {Array.from({ length: Math.min(product.score, 5) }).map(() => (
         <TreeIcon />
       ))}
     </Typography>

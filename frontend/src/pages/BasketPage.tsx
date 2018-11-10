@@ -1,6 +1,5 @@
 import React from 'react'
-import { List, Button, IconButton } from '@material-ui/core'
-import AddIcon from '@material-ui/icons/Add'
+import { List, IconButton } from '@material-ui/core'
 import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart'
 import { Product } from '../entities'
 import { Navigation } from '../ui/Navigation'
@@ -23,7 +22,7 @@ export const BasketPage = (props: {
         display: 'flex',
         flexDirection: 'column',
         flex: 1,
-        maxHeight: '100vh'
+        maxHeight: '100vh',
       }}
     >
       <div
@@ -31,7 +30,7 @@ export const BasketPage = (props: {
           display: 'flex',
           flexDirection: 'column',
           flex: 1,
-          overflow: 'auto'
+          overflow: 'auto',
         }}
       >
         <div style={{ flex: 1 }}>
