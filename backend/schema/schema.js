@@ -103,7 +103,7 @@ async function main() {
       products: {
         type: GraphQLList(ProductType),
         async resolve(parent, args) {
-          const res = await client.query("SELECT * from product");
+          const res = await client.query("SELECT * from product LIMIT 30");
           return res.rows.map(product => ({
             ...product,
             id: product.productid
@@ -115,7 +115,7 @@ async function main() {
         args: { name: { type: GraphQLString } },
         async resolve(parent, args) {
           const res = await client.query(
-            "SELECT * from product where name ilike $1",
+            "SELECT * from product where name ilike $1 LIMIT 30",
             ["%" + args.name + "%"]
           );
           return res.rows.map(product => ({
