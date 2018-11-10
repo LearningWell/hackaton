@@ -9,7 +9,7 @@ export const ProductPage = (props: { path: string; productId?: number }) => {
   useEffect(() => {
     const fn = async () => {
       const response = await fetch(
-        `http://${window.location.hostname}:4000/graphql?`,
+        `//${window.location.hostname}:4000/graphql?`,
         {
           method: 'POST',
           headers: {
@@ -24,6 +24,11 @@ export const ProductPage = (props: { path: string; productId?: number }) => {
                   name
                   information
                   score
+                  quantity
+                  certification {
+                    name
+                    img
+                  }
                 }
               }
             `,
@@ -81,6 +86,12 @@ export const ProductPage = (props: { path: string; productId?: number }) => {
                   <TreeIcon key={idx} grey />
                 )
               )}
+            </div>
+            <Typography variant="body2">{product.quantity}</Typography>
+            <div>
+              {product.certification.map(c => (
+                <img src={`/${c.img}`} />
+              ))}
             </div>
             <Typography variant="body2">{product.information}</Typography>
 

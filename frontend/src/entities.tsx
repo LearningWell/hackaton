@@ -25,4 +25,6 @@ export type Product = {
   information: string
   img: string
   score: number
+  quantity: string
+  certification: Array<{ name: string; img: string }>
 }
