@@ -21,7 +21,7 @@ export const Navigation = () => (
     />
     <BottomNavigationAction
       component={Link}
-      to="/product"
+      to="/basket"
       icon={<ShoppingBasketIcon />}
     />
     <BottomNavigationAction component={Link} to="/" icon={<PeopleIcon />} />

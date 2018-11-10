@@ -1,17 +1,24 @@
 import React, { useState } from 'react'
-import {
-  TextField,
-  IconButton,
-  ListItem,
-  ListItemText,
-  Typography,
-  List,
-  Button
-} from '@material-ui/core'
+import { TextField, IconButton, List, Button } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 import SearchIcon from '@material-ui/icons/Search'
-import { Product, TreeIcon } from '../entities'
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart'
+import { Product } from '../entities'
 import { Navigation } from '../ui/Navigation'
+import { ProductListItem } from '../ui/ProductListItem'
+import { Link } from '@reach/router'
+
+declare module '@material-ui/core/Button/Button' {
+  interface ButtonProps {
+    to?: string
+  }
+}
+
+declare module '@material-ui/core/ListItem/ListItem' {
+  interface ListItemProps {
+    to?: string
+  }
+}
 
 const SearchField = (props: { onSearch: (query: string) => void }) => {
   const [query, setQuery] = useState('')
@@ -38,24 +45,10 @@ const SearchField = (props: { onSearch: (query: string) => void }) => {
   )
 }
 
-const ProductListItem = ({
-  product,
-  divider
-}: {
-  product: Product
-  divider?: boolean
-}) => (
-  <ListItem divider={divider}>
-    <ListItemText primary={product.name} />
-    <Typography>
-      {Array.from({ length: product.score }).map(() => (
-        <TreeIcon />
-      ))}
-    </Typography>
-  </ListItem>
-)
-
-export const SearchPage = (props: { path: string }) => {
+export const SearchPage = (props: {
+  path: string
+  addToBasket: (product: Product) => void
+}) => {
   const [products, setProducts] = useState([] as Array<Product>)
 
   return (
@@ -72,6 +65,7 @@ export const SearchPage = (props: { path: string }) => {
                 query: `
                   query($query: String!) {
                     searchProducts(name: $query) {
+                      id
                       name
                       score
                     }
@@ -97,13 +91,23 @@ export const SearchPage = (props: { path: string }) => {
                   key={i}
                   product={product}
                   divider={i < products.length - 1}
+                  actionButton={
+                    <IconButton onClick={() => props.addToBasket(product)}>
+                      <AddShoppingCartIcon />
+                    </IconButton>
+                  }
                 />
               ))}
             </List>
           )}
         </div>
         <div style={{ position: 'absolute', right: 16, bottom: 16 + 56 }}>
-          <Button color="secondary" variant="fab">
+          <Button
+            color="secondary"
+            variant="fab"
+            component={Link}
+            to="/new-product"
+          >
             <AddIcon />
           </Button>
         </div>

@@ -3,7 +3,7 @@ import { Navigation } from '../ui/Navigation'
 import { Product, TreeIcon } from '../entities'
 import { Typography } from '@material-ui/core'
 
-export const ProductPage = (props: { path: string }) => {
+export const ProductPage = (props: { path: string; productId?: number }) => {
   const [product, setProduct] = useState(null as Product | null)
   useEffect(
     (async () => {
@@ -14,15 +14,17 @@ export const ProductPage = (props: { path: string }) => {
         },
         body: JSON.stringify({
           query: `
-          query($query: ID!) {
-            product(id: $query) {
-              name
-              score
+            query($id: Int!) {
+              product(id: $id) {
+                id
+                img
+                name
+                score
+              }
             }
-          }
-        `,
+          `,
           variables: {
-            query: '1'
+            id: +props.productId!
           }
         })
       })
@@ -52,6 +54,7 @@ export const ProductPage = (props: { path: string }) => {
                 <TreeIcon grey />
               ))}
             </div>
+            <img src={`/${product.img}`} />
           </div>
         )}
       </div>
