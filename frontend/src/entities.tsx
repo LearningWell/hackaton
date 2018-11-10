@@ -1,6 +1,7 @@
 import React from 'react'
 
-export const primary = '#f9a825'
+//export const primary = '#f9a825'
+export const primary = '#067c0a'
 export const secondary = '#d84315'
 
 export const TreeIcon = (props: { grey?: boolean }) => (

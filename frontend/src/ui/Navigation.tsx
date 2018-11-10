@@ -12,7 +12,17 @@ declare module '@material-ui/core/BottomNavigationAction/BottomNavigationAction'
 }
 
 export const Navigation = () => (
-  <BottomNavigation color="primary" style={{ backgroundColor: '#f9a825' }}>
+  <BottomNavigation
+    color="primary"
+    style={{
+      backgroundColor: '#f9a825',
+      zIndex: 1,
+      position: 'fixed',
+      bottom: 0,
+      left: 0,
+      right: 0,
+    }}
+  >
     <BottomNavigationAction
       component={Link}
       to="/"

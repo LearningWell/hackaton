@@ -25,7 +25,12 @@ const SearchField = (props: { onSearch: (query: string) => void }) => {
 
   return (
     <form
-      style={{ display: 'flex', alignSelf: 'center', paddingTop: 16 }}
+      style={{
+        display: 'flex',
+        alignSelf: 'center',
+        paddingTop: 16,
+        flexShrink: 0,
+      }}
       onSubmit={e => {
         e.preventDefault()
         props.onSearch(query)
@@ -59,7 +64,7 @@ export const SearchPage = (props: {
             const response = await fetch('http://localhost:4000/graphql?', {
               method: 'POST',
               headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
               },
               body: JSON.stringify({
                 query: `
@@ -72,9 +77,9 @@ export const SearchPage = (props: {
                   }
                 `,
                 variables: {
-                  query: query
-                }
-              })
+                  query: query,
+                },
+              }),
             })
             setProducts(
               ((await response.json()).data.searchProducts as Array<
@@ -101,7 +106,7 @@ export const SearchPage = (props: {
             </List>
           )}
         </div>
-        <div style={{ position: 'absolute', right: 16, bottom: 16 + 56 }}>
+        <div style={{ position: 'fixed', right: 16, bottom: 16 + 56 }}>
           <Button
             color="secondary"
             variant="fab"
