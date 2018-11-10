@@ -102,7 +102,14 @@ export const SearchPage = (props: {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-      <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          flex: 1,
+          overflow: 'auto',
+        }}
+      >
         <SearchField
           query={props.query}
           setQuery={props.setQuery}

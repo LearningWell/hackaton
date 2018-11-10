@@ -75,7 +75,6 @@ export const NewProductPage = (props: { path: string }) => {
             display: 'flex',
             flexDirection: 'column',
             flex: 1,
-            marginBottom: '50px',
           }}
           onSubmit={async e => {
             e.preventDefault()
@@ -108,9 +107,10 @@ export const NewProductPage = (props: { path: string }) => {
                 }),
               }
             )
-            window.location.href = `/product/${
-              (await response.json()).data.addProduct.id
-            }`
+            const body = await response.json()
+            if (body.data && body.data.addProduct) {
+              window.location.href = `/product/${body.data.addProduct.id}`
+            }
           }}
         >
           <div style={{ padding: '16px 0', flex: 1 }}>

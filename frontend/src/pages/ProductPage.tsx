@@ -56,6 +56,7 @@ export const ProductPage = (props: { path: string; productId?: number }) => {
           flexDirection: 'column',
           flex: 1,
           padding: 16,
+          overflow: 'auto',
         }}
       >
         {product && (
@@ -107,7 +108,10 @@ export const ProductPage = (props: { path: string; productId?: number }) => {
             <Typography variant="body2">{product.information}</Typography>
 
             {product.img && (
-              <img src={product.img} style={{ objectFit: 'contain' }} />
+              <img
+                src={product.img}
+                style={{ objectFit: 'contain', marginBottom: 16 }}
+              />
             )}
           </div>
         )}
