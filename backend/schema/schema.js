@@ -126,7 +126,7 @@ async function main() {
         args: {
           name: { type: new GraphQLNonNull(GraphQLString) },
           score: { type: new GraphQLNonNull(GraphQLInt) },
-          img: { type: new GraphQLNonNull(GraphQLString) },
+          img: { type: GraphQLString },
           manufacturerid: { type: new GraphQLNonNull(GraphQLInt) }
         },
         async resolve(parent, args) {
