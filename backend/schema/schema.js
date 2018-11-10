@@ -30,10 +30,22 @@ async function main() {
       information: { type: GraphQLString },
       quantity: { type: GraphQLString },
       barcode: { type: GraphQLString },
+      certification: {
+        type: GraphQLList(CertificationType),
+        async resolve(parent, args) {
+          const res = await client.query(
+            "SELECT * from certification where certificationid = ANY($1)",
+            [parent.certifications]
+          );
+          return res.rows.map(certification => ({
+            ...certification,
+            id: certification.certificationid
+          }));
+        }
+      },
       manufacturer: {
         type: ManufacturerType,
         async resolve(parent, args) {
-          console.log(parent);
           const res = await client.query(
             "SELECT * from manufacturer where manufacturerId=$1",
             [parent.manufacturerid]
@@ -41,6 +53,16 @@ async function main() {
           return res.rows[0];
         }
       }
+    })
+  });
+
+  const CertificationType = new GraphQLObjectType({
+    name: "Certification",
+    fields: () => ({
+      id: { type: GraphQLInt },
+      name: { type: GraphQLString },
+      img: { type: GraphQLString },
+      information: { type: GraphQLString }
     })
   });
 

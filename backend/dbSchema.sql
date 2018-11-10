@@ -40,13 +40,13 @@ CREATE TABLE product
     (name, score, manufacturerId, img, certifications)
   VALUES('Mjölk', 1, (SELECT manufacturerId
       FROM manufacturer
-      WHERE manufacturer.name='LearningWell'), '/products/images/mjolk.jpg', '{}'),
+      WHERE manufacturer.name='LearningWell'), '/products/images/mjolk.jpg', '{1, 2}'),
     ('Köttfärs', 2, (SELECT manufacturerId
       FROM manufacturer
-      WHERE manufacturer.name='MachineFood'), '/products/images/kott.jpg', '{}'),
+      WHERE manufacturer.name='MachineFood'), '/products/images/kott.jpg', '{2}'),
     ('Godis', 3, (SELECT manufacturerId
       FROM manufacturer
-      WHERE manufacturer.name='StarMeat Inc'), '/products/images/godis.jpg', '{}');
+      WHERE manufacturer.name='StarMeat Inc'), '/products/images/godis.jpg', '{3}');
 
 
   INSERT INTO certification
