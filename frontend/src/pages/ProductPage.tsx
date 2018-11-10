@@ -8,13 +8,15 @@ export const ProductPage = (props: { path: string; productId?: number }) => {
   const [product, setProduct] = useState(null as Product | null)
   useEffect(() => {
     const fn = async () => {
-      const response = await fetch('http://localhost:4000/graphql?', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          query: `
+      const response = await fetch(
+        `http://${window.location.hostname}:4000/graphql?`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            query: `
               query($id: Int!) {
                 product(id: $id) {
                   id
@@ -25,11 +27,12 @@ export const ProductPage = (props: { path: string; productId?: number }) => {
                 }
               }
             `,
-          variables: {
-            id: +props.productId!,
-          },
-        }),
-      })
+            variables: {
+              id: +props.productId!,
+            },
+          }),
+        }
+      )
       setProduct((await response.json()).data.product)
     }
 

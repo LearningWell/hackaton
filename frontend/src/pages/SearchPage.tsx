@@ -67,13 +67,15 @@ export const SearchPage = (props: {
           query={props.query}
           setQuery={props.setQuery}
           onSearch={async query => {
-            const response = await fetch('http://localhost:4000/graphql?', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                query: `
+            const response = await fetch(
+              `http://${window.location.hostname}:4000/graphql?`,
+              {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  query: `
                   query($query: String!) {
                     searchProducts(name: $query) {
                       id
@@ -82,11 +84,12 @@ export const SearchPage = (props: {
                     }
                   }
                 `,
-                variables: {
-                  query: query,
-                },
-              }),
-            })
+                  variables: {
+                    query: query,
+                  },
+                }),
+              }
+            )
             setProducts(
               ((await response.json()).data.searchProducts as Array<
                 Product
