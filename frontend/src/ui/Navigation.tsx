@@ -49,7 +49,11 @@ export const Navigation = (props: { basket: Array<Product> }) => (
           )
         }
       />
-      <BottomNavigationAction component={Link} to="/" icon={<PeopleIcon />} />
+      <BottomNavigationAction
+        component={Link}
+        to="/my-page"
+        icon={<PeopleIcon />}
+      />
     </BottomNavigation>
   </>
 )

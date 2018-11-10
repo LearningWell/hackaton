@@ -6,6 +6,7 @@ import { ProductPage } from './pages/ProductPage'
 import { Product, secondary, primary } from './entities'
 import { BasketPage } from './pages/BasketPage'
 import { NewProductPage } from './pages/NewProductPage'
+import { MyPage } from './pages/MyPage'
 
 const theme = createMuiTheme({
   palette: {
@@ -40,6 +41,7 @@ export const App = () => {
           />
           <ProductPage path="/product/:productId" basket={basket} />
           <NewProductPage path="/new-product" basket={basket} />
+          <MyPage path="/my-page" basket={basket} />
         </Router>
       </div>
     </MuiThemeProvider>
