@@ -10,6 +10,7 @@ import CloseIcon from '@material-ui/icons/Close'
 
 export const Camera = (props: {
   active: boolean
+  onClose: () => void
   onPhoto: (url: string) => void
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -41,7 +42,7 @@ export const Camera = (props: {
         <AppBar>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <div>
-              <IconButton>
+              <IconButton onClick={props.onClose}>
                 <CloseIcon />
               </IconButton>
             </div>

@@ -27,6 +27,7 @@ export const ProductListItem = ({
     {actionButton && (
       <div
         onMouseDown={e => e.stopPropagation()}
+        onTouchStart={e => e.stopPropagation()}
         onClick={e => e.preventDefault()}
       >
         {actionButton}
