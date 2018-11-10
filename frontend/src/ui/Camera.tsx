@@ -30,8 +30,12 @@ export const Camera = (props: {
 
   const takePhoto = () => {
     const canvas = canvasRef.current!
+    const video = videoRef.current!
+    const rect = video.getBoundingClientRect()!
+    canvas.width = rect.width
+    canvas.height = rect.width * (9 / 16)
     const ctx = canvas.getContext('2d')!
-    ctx.drawImage(videoRef.current!, 0, 0, canvas.width, canvas.height)
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
     const dataURI = canvas.toDataURL('image/jpeg')
     props.onPhoto(dataURI)
   }

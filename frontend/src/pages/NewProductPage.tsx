@@ -174,6 +174,16 @@ export const NewProductPage = (props: { path: string }) => {
               onClose={() => setCameraActive(false)}
             />
             <Button onClick={() => setCameraActive(true)}>Take Picture</Button>
+            {img && (
+              <img
+                src={img}
+                style={{
+                  maxWidth: '100%',
+                  maxHeight: 300,
+                  objectFit: 'contain',
+                }}
+              />
+            )}
           </div>
           <Button type="submit" color="secondary" variant="raised">
             Create
