@@ -98,6 +98,7 @@ export const NewProductPage = (props: { path: string }) => {
                 setImg(photo)
                 setCameraActive(false)
               }}
+              onClose={() => setCameraActive(false)}
             />
             <Button onClick={() => setCameraActive(true)}>Take Picture</Button>
           </div>
