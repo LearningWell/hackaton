@@ -94,7 +94,14 @@ export const ProductPage = (props: { path: string; productId?: number }) => {
             <Typography variant="body2">{product.quantity}</Typography>
             <div>
               {product.certification.map(c => (
-                <img src={`/${c.img}`} />
+                <img
+                  src={`/${c.img}`}
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    objectFit: 'contain',
+                  }}
+                />
               ))}
             </div>
             <Typography variant="body2">{product.information}</Typography>
