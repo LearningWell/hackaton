@@ -18,7 +18,7 @@ declare module '@material-ui/core/BottomNavigationAction/BottomNavigationAction'
 
 export const Navigation = (props: { basket: Array<Product> }) => (
   <>
-    <div style={{ height: 56 }} />
+    <div style={{ height: 56, flexShrink: 0 }} />
     <BottomNavigation
       color="primary"
       style={{
