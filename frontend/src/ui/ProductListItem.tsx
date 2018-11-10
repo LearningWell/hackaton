@@ -18,8 +18,11 @@ export const ProductListItem = ({
     to={`/product/${product.id}`}
     divider={divider}
   >
-    <ListItemText primary={product.name} />
-    <Typography>
+    <ListItemText
+      primary={product.name}
+      style={{ overflowWrap: 'break-word' }}
+    />
+    <Typography style={{ flexShrink: 0 }}>
       {Array.from({ length: Math.min(product.score, 5) }).map((_, idx) => (
         <TreeIcon key={idx} />
       ))}

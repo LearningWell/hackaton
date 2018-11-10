@@ -147,6 +147,16 @@ async function main() {
             id: manufacturer.manufacturerid
           }));
         }
+      },
+      certifications: {
+        type: GraphQLList(CertificationType),
+        async resolve(parent, args) {
+          const res = await client.query("SELECT * from certification");
+          return res.rows.map(certification => ({
+            ...certification,
+            id: certification.certificationid
+          }));
+        }
       }
     }
   });

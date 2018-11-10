@@ -71,7 +71,12 @@ export const NewProductPage = (props: { path: string }) => {
       >
         <Typography variant="title">Add Product</Typography>
         <form
-          style={{ display: 'flex', flexDirection: 'column', flex: 1 }}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            flex: 1,
+            marginBottom: '50px',
+          }}
           onSubmit={async e => {
             e.preventDefault()
             const response = await fetch(
