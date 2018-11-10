@@ -5,8 +5,8 @@ import { Typography } from '@material-ui/core'
 
 export const ProductPage = (props: { path: string; productId?: number }) => {
   const [product, setProduct] = useState(null as Product | null)
-  useEffect(
-    (async () => {
+  useEffect(() => {
+    const fn = async () => {
       const response = await fetch('http://localhost:4000/graphql?', {
         method: 'POST',
         headers: {
@@ -14,25 +14,26 @@ export const ProductPage = (props: { path: string; productId?: number }) => {
         },
         body: JSON.stringify({
           query: `
-            query($id: Int!) {
-              product(id: $id) {
-                id
-                img
-                name
-                information
-                score
+              query($id: Int!) {
+                product(id: $id) {
+                  id
+                  img
+                  name
+                  information
+                  score
+                }
               }
-            }
-          `,
+            `,
           variables: {
             id: +props.productId!,
           },
         }),
       })
       setProduct((await response.json()).data.product)
-    }) as any,
-    []
-  )
+    }
+
+    fn()
+  }, [])
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>

@@ -1,6 +1,15 @@
-import React, { useState, useRef, createRef } from 'react'
+import React, { useState, useRef, createRef, useEffect } from 'react'
 import { Navigation } from '../ui/Navigation'
-import { Typography, TextField, Button } from '@material-ui/core'
+import {
+  Typography,
+  TextField,
+  Button,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+} from '@material-ui/core'
 import { Camera } from '../ui/Camera'
 import { Redirect } from '@reach/router'
 
@@ -12,10 +21,43 @@ export const NewProductPage = (props: { path: string }) => {
   const [img, setImg] = useState<string | null>(null)
   const [cameraActive, setCameraActive] = useState(false)
   const [redirectTo, setRedirectTo] = useState<string | null>(null)
+  console.log('redirectTo', redirectTo)
+
+  const [manufacturers, setManufacturers] = useState([] as Array<{
+    id: number
+    name: string
+  }>)
+
+  useEffect(() => {
+    const fn = async () => {
+      const serverResponse = await fetch('http://localhost:4000/graphql?', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: `
+              query {
+                manufacturers {
+                  id
+                  name
+                }
+              }
+            `,
+        }),
+      })
+
+      setManufacturers((await serverResponse.json()).data.manufacturers)
+    }
+
+    fn()
+
+    return () => {}
+  }, [])
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-      {redirectTo && <Redirect to={redirectTo} />}
+      {redirectTo && <Redirect from="/new-product" to={redirectTo} />}
       <div
         style={{
           display: 'flex',
@@ -51,7 +93,9 @@ export const NewProductPage = (props: { path: string }) => {
                 },
               }),
             })
-            setRedirectTo((await response.json()).data.addProduct.id)
+            setRedirectTo(
+              `/product/${(await response.json()).data.addProduct.id}`
+            )
           }}
         >
           <div style={{ padding: '16px 0', flex: 1 }}>
@@ -84,14 +128,28 @@ export const NewProductPage = (props: { path: string }) => {
             />
             <br />
             <br />
-            <TextField
-              type="number"
-              variant="outlined"
-              label="manufacturerId"
-              value={manufacturerId || ''}
-              onChange={e => setManufacturerId(+e.target.value)}
-              fullWidth
-            />
+            <FormControl variant="outlined" fullWidth>
+              <InputLabel htmlFor="Manufacturer">Manufacturer</InputLabel>
+              <Select
+                variant="outlined"
+                id="Manufacturer"
+                value={manufacturerId}
+                onChange={e => setManufacturerId(+e.target.value)}
+                input={
+                  <OutlinedInput
+                    labelWidth={100}
+                    name="age"
+                    id="outlined-age-simple"
+                  />
+                }
+              >
+                {manufacturers.map(manufacturer => (
+                  <MenuItem value={manufacturer.id}>
+                    {manufacturer.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
             <Camera
               active={cameraActive}
               onPhoto={photo => {
