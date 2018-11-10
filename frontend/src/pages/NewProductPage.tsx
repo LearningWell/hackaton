@@ -31,7 +31,11 @@ export const NewProductPage = (props: { path: string }) => {
   useEffect(() => {
     const fn = async () => {
       const serverResponse = await fetch(
-        `//${window.location.hostname}:4000/graphql?`,
+        `//${
+          window.location.hostname === 'localhost'
+            ? 'localhost:4000'
+            : window.location.hostname
+        }/graphql?`,
         {
           method: 'POST',
           headers: {
@@ -80,7 +84,11 @@ export const NewProductPage = (props: { path: string }) => {
           onSubmit={async e => {
             e.preventDefault()
             const response = await fetch(
-              `//${window.location.hostname}:4000/graphql?`,
+              `//${
+                window.location.hostname === 'localhost'
+                  ? 'localhost:4000'
+                  : window.location.hostname
+              }/graphql?`,
               {
                 method: 'POST',
                 headers: {

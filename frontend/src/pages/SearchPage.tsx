@@ -61,7 +61,11 @@ export const SearchPage = (props: {
   const [products, setProducts] = useState([] as Array<Product>)
   const searchProducts = async (query: string) => {
     const response = await fetch(
-      `//${window.location.hostname}:4000/graphql?`,
+      `//${
+        window.location.hostname === 'localhost'
+          ? 'localhost:4000'
+          : window.location.hostname
+      }/graphql?`,
       {
         method: 'POST',
         headers: {

@@ -9,7 +9,11 @@ export const ProductPage = (props: { path: string; productId?: number }) => {
   useEffect(() => {
     const fn = async () => {
       const response = await fetch(
-        `//${window.location.hostname}:4000/graphql?`,
+        `//${
+          window.location.hostname === 'localhost'
+            ? 'localhost:4000'
+            : window.location.hostname
+        }/graphql?`,
         {
           method: 'POST',
           headers: {
