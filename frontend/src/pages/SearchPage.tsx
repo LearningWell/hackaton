@@ -101,7 +101,14 @@ export const SearchPage = (props: {
   }, [])
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        flex: 1,
+        maxHeight: '100vh',
+      }}
+    >
       <div
         style={{
           display: 'flex',
