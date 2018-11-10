@@ -12,24 +12,31 @@ declare module '@material-ui/core/BottomNavigationAction/BottomNavigationAction'
 }
 
 export const Navigation = () => (
-  <BottomNavigation
-    color="primary"
-    style={{
-      backgroundColor: '#f9a825',
-      zIndex: 1,
-    }}
-  >
-    <BottomNavigationAction
-      component={Link}
-      to="/"
-      selected
-      icon={<SearchIcon />}
-    />
-    <BottomNavigationAction
-      component={Link}
-      to="/basket"
-      icon={<ShoppingBasketIcon />}
-    />
-    <BottomNavigationAction component={Link} to="/" icon={<PeopleIcon />} />
-  </BottomNavigation>
+  <>
+    <div style={{ height: 56 }} />
+    <BottomNavigation
+      color="primary"
+      style={{
+        backgroundColor: '#f9a825',
+        zIndex: 1,
+        position: 'fixed',
+        left: 0,
+        right: 0,
+        bottom: 0,
+      }}
+    >
+      <BottomNavigationAction
+        component={Link}
+        to="/"
+        selected
+        icon={<SearchIcon />}
+      />
+      <BottomNavigationAction
+        component={Link}
+        to="/basket"
+        icon={<ShoppingBasketIcon />}
+      />
+      <BottomNavigationAction component={Link} to="/" icon={<PeopleIcon />} />
+    </BottomNavigation>
+  </>
 )
