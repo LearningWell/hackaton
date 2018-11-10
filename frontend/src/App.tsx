@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core'
 import { Router } from '@reach/router'
 import { SearchPage } from './pages/SearchPage'
 import { ProductPage } from './pages/ProductPage'
 import { Product, secondary, primary } from './entities'
+import { BasketPage } from './pages/BasketPage'
+import { NewProductPage } from './pages/NewProductPage'
 
 const theme = createMuiTheme({
   palette: {
@@ -15,24 +17,28 @@ const theme = createMuiTheme({
   }
 })
 
-type State = {
-  searchText: string
-  products?: Array<Product>
-}
+export const App = () => {
+  const [basket, setBasket] = useState([] as Array<Product>)
 
-export class App extends React.Component<{}, State> {
-  state: State = { searchText: '' }
-
-  render() {
-    return (
-      <MuiThemeProvider theme={theme}>
-        <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-          <Router style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-            <SearchPage path="/" />
-            <ProductPage path="/product" />
-          </Router>
-        </div>
-      </MuiThemeProvider>
-    )
-  }
+  return (
+    <MuiThemeProvider theme={theme}>
+      <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+        <Router style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+          <SearchPage
+            path="/"
+            addToBasket={product => setBasket([...basket, product])}
+          />
+          <BasketPage
+            path="/basket"
+            basket={basket}
+            removeFromBasket={product =>
+              setBasket(basket.filter(p => p !== product))
+            }
+          />
+          <ProductPage path="/product/:productId" />
+          <NewProductPage path="/new-product" />
+        </Router>
+      </div>
+    </MuiThemeProvider>
+  )
 }
