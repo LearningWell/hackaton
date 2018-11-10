@@ -72,7 +72,8 @@ async function main() {
             "SELECT * from product where productId=$1",
             [args.id]
           );
-          return res.rows[0];
+          console.log(res.rows[0]);
+          return { ...res.rows[0], id: res.rows[0].productid };
         }
       },
       products: {
@@ -107,14 +108,20 @@ async function main() {
             "SELECT * from manufacturer where manufacturerId=$1",
             [args.id]
           );
-          return res.rows;
+          return res.rows.map(manufacturer => ({
+            ...manufacturer,
+            id: manufacturer.manufacturerid
+          }));
         }
       },
       manufacturers: {
         type: GraphQLList(ManufacturerType),
         async resolve(parent, args) {
           const res = await client.query("SELECT * from manufacturer");
-          return res.rows;
+          return res.rows.map(manufacturer => ({
+            ...manufacturer,
+            id: manufacturer.manufacturerid
+          }));
         }
       }
     }
