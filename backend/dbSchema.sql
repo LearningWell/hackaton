@@ -23,6 +23,8 @@ CREATE TABLE product
   score int NOT NULL,
   img text,
   information varchar(200),
+  quantity text,
+  barcode varchar(80),
   manufacturerId int references manufacturer(manufacturerId),
   certifications int
   []

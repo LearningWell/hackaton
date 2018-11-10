@@ -68,18 +68,22 @@ export const ProductPage = (props: { path: string; productId?: number }) => {
 
             <Typography variant="title">{product.name}</Typography>
             <div>
-              {Array.from({ length: Math.min(product.score, 5) }).map(() => (
-                <TreeIcon />
-              ))}
+              {Array.from({ length: Math.min(product.score, 5) }).map(
+                (_, idx) => (
+                  <TreeIcon key={idx} />
+                )
+              )}
               {Array.from({ length: 5 - Math.min(product.score, 5) }).map(
-                () => (
-                  <TreeIcon grey />
+                (_, idx) => (
+                  <TreeIcon key={idx} grey />
                 )
               )}
             </div>
             <Typography variant="body2">{product.information}</Typography>
 
-            {product.img && <img src={product.img} />}
+            {product.img && (
+              <img src={product.img} style={{ objectFit: 'contain' }} />
+            )}
           </div>
         )}
       </div>

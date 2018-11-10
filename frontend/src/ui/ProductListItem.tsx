@@ -20,8 +20,8 @@ export const ProductListItem = ({
   >
     <ListItemText primary={product.name} />
     <Typography>
-      {Array.from({ length: Math.min(product.score, 5) }).map(() => (
-        <TreeIcon />
+      {Array.from({ length: Math.min(product.score, 5) }).map((_, idx) => (
+        <TreeIcon key={idx} />
       ))}
     </Typography>
     {actionButton && (

@@ -20,9 +20,11 @@ declare module '@material-ui/core/ListItem/ListItem' {
   }
 }
 
-const SearchField = (props: { onSearch: (query: string) => void }) => {
-  const [query, setQuery] = useState('')
-
+const SearchField = (props: {
+  onSearch: (query: string) => void
+  query: string
+  setQuery: (query: string) => void
+}) => {
   return (
     <form
       style={{
@@ -33,12 +35,12 @@ const SearchField = (props: { onSearch: (query: string) => void }) => {
       }}
       onSubmit={e => {
         e.preventDefault()
-        props.onSearch(query)
+        props.onSearch(props.query)
       }}
     >
       <TextField
-        value={query}
-        onChange={e => setQuery(e.target.value)}
+        value={props.query}
+        onChange={e => props.setQuery(e.target.value)}
         style={{ flex: 1 }}
       />
       <div>
@@ -53,6 +55,8 @@ const SearchField = (props: { onSearch: (query: string) => void }) => {
 export const SearchPage = (props: {
   path: string
   addToBasket: (product: Product) => void
+  query: string
+  setQuery: (query: string) => void
 }) => {
   const [products, setProducts] = useState([] as Array<Product>)
 
@@ -60,6 +64,8 @@ export const SearchPage = (props: {
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
       <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
         <SearchField
+          query={props.query}
+          setQuery={props.setQuery}
           onSearch={async query => {
             const response = await fetch('http://localhost:4000/graphql?', {
               method: 'POST',
