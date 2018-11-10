@@ -93,7 +93,10 @@ async function main() {
             "SELECT * from product where name ilike $1",
             ["%" + args.name + "%"]
           );
-          return res.rows;
+          return res.rows.map(product => ({
+            ...product,
+            id: product.productid
+          }));
         }
       },
       manufacturer: {
@@ -105,8 +108,6 @@ async function main() {
             [args.id]
           );
           return res.rows;
-
-          //return mockManufacturers.find(x => x.id === args.id);
         }
       },
       manufacturers: {
@@ -134,29 +135,13 @@ async function main() {
         async resolve(parent, args) {
           const score = Math.max(Math.min(args.score, 5), 0);
           const res = await client.query(
-            "INSERT INTO product (name, score, img, information, manufacturerid) VALUES($1, $2, $3, $4, $5)",
+            "INSERT INTO product (name, score, img, information, manufacturerid) VALUES($1, $2, $3, $4, $5) RETURNING productId",
             [args.name, score, args.img, args.information, args.manufacturerid]
           );
-          return res.rows[0];
+          console.log(res.rows[0].productid);
+          return { id: res.rows[0].productid };
         }
       }
-      /*
-      addBook: {    
-        type: BookType,
-        args: {
-          name: { type: new GraphQLNonNull(GraphQLString) },
-          genre: { type: new GraphQLNonNull(GraphQLString) },
-          authorId: { type: new GraphQLNonNull(GraphQLID) }
-        },
-        resolve(parent, args) {
-          let book = new Book({
-            name: args.name,
-            genre: args.genre,
-            authorId: args.authorId
-          });
-          return book.save();
-        }
-      }*/
     }
   });
   return new GraphQLSchema({
