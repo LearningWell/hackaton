@@ -7,6 +7,7 @@ import { Product } from '../entities'
 import { Navigation } from '../ui/Navigation'
 import { ProductListItem } from '../ui/ProductListItem'
 import { Link } from '@reach/router'
+import { CSSProperties } from 'jss/css'
 
 declare module '@material-ui/core/Button/Button' {
   interface ButtonProps {
@@ -24,6 +25,7 @@ const SearchField = (props: {
   onSearch: (query: string) => void
   query: string
   setQuery: (query: string) => void
+  style?: CSSProperties
 }) => {
   return (
     <form
@@ -32,6 +34,7 @@ const SearchField = (props: {
         alignSelf: 'center',
         paddingTop: 16,
         flexShrink: 0,
+        ...(props.style as any),
       }}
       onSubmit={e => {
         e.preventDefault()
@@ -42,6 +45,8 @@ const SearchField = (props: {
         value={props.query}
         onChange={e => props.setQuery(e.target.value)}
         style={{ flex: 1 }}
+        variant="outlined"
+        label="Search Products"
       />
       <div>
         <IconButton type="submit">
@@ -59,6 +64,7 @@ export const SearchPage = (props: {
   setQuery: (query: string) => void
 }) => {
   const [products, setProducts] = useState([] as Array<Product>)
+
   const searchProducts = async (query: string) => {
     const response = await fetch(
       `//${
@@ -115,15 +121,17 @@ export const SearchPage = (props: {
           flexDirection: 'column',
           flex: 1,
           overflow: 'auto',
+          justifyContent: products.length > 0 ? '' : 'center',
         }}
       >
         <SearchField
           query={props.query}
           setQuery={props.setQuery}
           onSearch={searchProducts}
+          style={products ? {} : {}}
         />
-        <div style={{ flex: 1 }}>
-          {products && (
+        {products.length > 0 && (
+          <div style={{ flex: 1 }}>
             <List>
               {products.map((product, i) => (
                 <ProductListItem
@@ -138,8 +146,8 @@ export const SearchPage = (props: {
                 />
               ))}
             </List>
-          )}
-        </div>
+          </div>
+        )}
         <div style={{ position: 'fixed', right: 16, bottom: 16 + 56 }}>
           <Button
             color="secondary"
