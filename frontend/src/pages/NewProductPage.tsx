@@ -30,13 +30,15 @@ export const NewProductPage = (props: { path: string }) => {
 
   useEffect(() => {
     const fn = async () => {
-      const serverResponse = await fetch('http://localhost:4000/graphql?', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          query: `
+      const serverResponse = await fetch(
+        `http://${window.location.hostname}:4000/graphql?`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            query: `
               query {
                 manufacturers {
                   id
@@ -44,8 +46,9 @@ export const NewProductPage = (props: { path: string }) => {
                 }
               }
             `,
-        }),
-      })
+          }),
+        }
+      )
 
       setManufacturers((await serverResponse.json()).data.manufacturers)
     }
@@ -71,28 +74,31 @@ export const NewProductPage = (props: { path: string }) => {
           style={{ display: 'flex', flexDirection: 'column', flex: 1 }}
           onSubmit={async e => {
             e.preventDefault()
-            const response = await fetch('http://localhost:4000/graphql?', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                query: `
+            const response = await fetch(
+              `http://${window.location.hostname}:4000/graphql?`,
+              {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  query: `
                   mutation($name: String!, $score: Int!, $manufacturerId: Int!, $img: String, $information: String!) {
                     addProduct(name: $name, score: $score, manufacturerid: $manufacturerId, img: $img, information: $information) {
                       id
                     }
                   }
                 `,
-                variables: {
-                  name,
-                  score,
-                  manufacturerId,
-                  img,
-                  information,
-                },
-              }),
-            })
+                  variables: {
+                    name,
+                    score,
+                    manufacturerId,
+                    img,
+                    information,
+                  },
+                }),
+              }
+            )
             setRedirectTo(
               `/product/${(await response.json()).data.addProduct.id}`
             )
